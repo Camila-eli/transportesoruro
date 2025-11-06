@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes Oruro QR Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .banner {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(30, 2, 130, 0.9) 0%, rgba(8, 178, 245, 0.68) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .banner video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        
+        .navbar {
+            width: 100%;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        
+        .navbar.scrolled {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            /* Quitamos el filtro que volvía blanco el logo */
+        }
+
+        .logo-text {
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: none;
+        }
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #0d3d54;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 120px 20px 40px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .hero-title {
+            font-size: clamp(2rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, #ffffff, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: #06222e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn-primary:hover {
+            background: #0284c7;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .qr-showcase {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            display: inline-block;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .qr-showcase h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .qr-image {
+            width: 200px;
+            height: 200px;
+            display: block;
+        }
+        
+        .qr-caption {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #083a51;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .section {
+            padding: 80px 20px;
+        }
+        
+        .section-light {
+            background: #f8fafc;
+        }
+        
+        .section-dark {
+            background: #1e293b;
+            color: white;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .destination-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .destination-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .destination-content {
+            padding: 25px;
+        }
+        
+        .destination-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+        
+        .destination-content p {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .destination-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0ea5e9;
+            margin-bottom: 15px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #0ea5e9;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .service-card.popular {
+            border: 2px solid #0ea5e9;
+            transform: scale(1.02);
+        }
+        
+        .service-card.popular::after {
+            content: 'MÁS POPULAR';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #0ea5e9;
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #0ea5e9;
+        }
+        
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        
+        .service-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0ea5e9;
+        }
+        
+        .service-features {
+            text-align: left;
+            margin-bottom: 25px;
+            list-style: none;
+        }
+        
+        .service-features li {
+            margin-bottom: 10px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        
+        .service-features li i {
+            color: #10b981;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+        
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-control:focus {
+            border-color: #043248;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            outline: none;
+        }
+        
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 60px 20px 30px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #052d40;
+        }
+        
+        .footer-column p {
+            margin-bottom: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #475c76;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: #47494a;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #0b0394;
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            padding-top: 25px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            color: #0f56ba;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(5, 214, 237, 0.98);
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+                z-index: 999;
+                padding-top: 80px;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .mobile-menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .qr-showcase {
+                padding: 20px;
+            }
+            
+            .qr-image {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-card.popular {
+                transform: scale(1);
+            }
+            
+            .contact-form {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 100px 15px 30px;
+            }
+            
+            .qr-showcase h3 {
+                font-size: 1rem;
+            }
+            
+            .section {
+                padding: 50px 15px;
+            }
+        }
+
+        /* Nuevos estilos añadidos */
+        .stats-section {
+            background: linear-gradient(135deg, #04425f 0%, #044667 100%);
+            color: white;
+            padding: 60px 20px;
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+
+        .chart-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .chart-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d);
+            border-radius: 2px;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        
+        .chart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .chart-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        
+        .chart-bar {
+            width: 30px;
+            height: 180px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #1a2a6c, #3498db);
+            border-radius: 15px;
+            transition: height 1.5s ease-out;
+            height: 0;
+        }
+        
+        .chart-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .chart-value {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a2a6c;
+        }
+        
+        /* Animación para las barras */
+        @keyframes fillBar {
+            from { height: 0; }
+            to { height: attr(data-height); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                padding: 20px 15px;
+            }
+        }
+    
+       
+        
+        .testimonials-section {
+            background: #f8fafc;
+            padding: 80px 20px;
+        }
+        
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 5rem;
+            color: #0ea5e9;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #64748b;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .testimonial-info h4 {
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-info p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .booking-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #0f172a;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #0f172a;
+            text-align: center;
+        }
+        
+        .booking-summary {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-label {
+            color: #64748b;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .summary-total {
+            border-top: 1px solid #cbd5e1;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #0ea5e9;
+        }
+        .video-background {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .video-background video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1;
+    }
+    
+    .content {
+        position: relative;
+        z-index: 1;
+        color: white;
+        text-align: center;
+        padding-top: 20%;
+    }
+
+
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Video Background -->
+    <div class="banner">
+            <div class="video-background">
+                <video autoplay muted loop playsinline>
+                     <source src="bolivar.mp4" type="video/mp4">
+                </video>
+            <div class="hero-section" id="inicio">
+            <div class="hero-content">
+                <h1 class="hero-title">TRANSPORTES ORURO</h1>
+                <p class="hero-subtitle">Viaja seguro, moderno y conectado con nuestra tecnología QR integrada</p>
+                  </div>
+                </div>
+        </div>
+              
+        <!-- Navbar -->
+        <nav class="navbar" id="navbar">
+            <div class="nav-container">
+                <div class="logo-container">
+                    <img src="log.png" alt="Logo de la empresa" class="logo">
+                    <span class="logo-text">Transportes Oruro</span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                        <li><a href="#destinos" class="nav-link">Destinos</a></li>
+                        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                        <li><a href="#estadisticas" class="nav-link">Estadísticas</a></li>
+                        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="mobile-menu-toggle" id="mobileToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+                <!-- Hero Content -->
+        <div class="hero-section" id="inicio">
+            <div class="hero-content"> 
+                <div class="hero-buttons">
+                    <button type="button" class="btn btn-primary" onclick="openBookingModal()">
+                        <i class="fas fa-ticket-alt"></i>
+                        Comprar Boleto
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="scrollToSection('destinos')">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Ver Destinos
+                    </button>
+                </div>
+                
+                <!-- QR Section -->
+                <div class="qr-showcase">
+                    <h3>Escanea el código QR para más información</h3>
+                    <div class="qr-container">
+                        <img src="Qr.png" alt="Código QR" class="qr-image">
+                    </div>
+                    <p class="qr-caption">Acceso rápido a su compra de boletos y seguimiento en tiempo real sadisfactorio</p>
+                </div>
+                
+                <!-- Features -->
+                 <center>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h3>Boletos QR</h3>
+                        <p>Información en tiempo real sobre tu viaje escaneando el código</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>Rutas Optimizadas</h3>
+                        <p>Las mejores rutas con paradas en lugares turísticos</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <h3>WiFi Gratuito</h3>
+                        <p>Mantente conectado durante todo tu viaje</p>
+                    </div>
+                </div>
+                </center>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Section -->
+    <section id="estadisticas" class="stats-section">
+        <div class="section-container">
+            <h2 class="section-title">Nuestros Logros</h2>
+            <p class="section-subtitle">Más de 10 años conectando a Bolivia con seguridad y tecnología</p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" id="clientCount">0</div>
+                    <div class="stat-label">Clientes Satisfechos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="destinationCount">0</div>
+                    <div class="stat-label">Destinos Conectados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="vehicleCount">0</div>
+                    <div class="stat-label">Vehículos Modernos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="yearCount">0</div>
+                    <div class="stat-label">Años de Experiencia</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Chart Section -->
+    <section class="section section-light">
+        <div class="section-container">
+            <h2 class="section-title">Nuestras Rutas Más Populares</h2>
+            <p class="section-subtitle">Estadísticas de viajes realizados en los últimos 6 meses</p>
+            <center>
+             <div class="chart-container">
+        <h3 class="chart-title">Viajes por Destino</h3>
+        <div class="chart-grid">
+            <div class="chart-item">
+                <div class="chart-bar">
+                    <div class="chart-fill" data-height="85%"></div>
+                </div>
+                <div class="chart-label">Oruro - La Paz</div>
+                <div class="chart-value">85%</div>
+            </div>
+            <div class="chart-item">
+                <div class="chart-bar">
+                    <div class="chart-fill" data-height="70%"></div>
+                </div>
+                <div class="chart-label">Oruro - Cochabamba</div>
+                <div class="chart-value">70%</div>
+            </div>
+            <div class="chart-item">
+                <div class="chart-bar">
+                    <div class="chart-fill" data-height="60%"></div>
+                </div>
+                <div class="chart-label">Oruro - Santa Cruz</div>
+                <div class="chart-value">60%</div>
+            </div>
+        </div>
+    </div>
+</center>
+
+        </div>
+    </section>
+    
+    <!-- Destinations Section -->
+    <section id="destinos" class="section section-light">
+        <div class="section-container">
+            <h2 class="section-title">Nuestros Destinos</h2>
+            <p class="section-subtitle">Conectamos Oruro con los principales destinos de Bolivia, ofreciendo comodidad, seguridad y tecnología de vanguardia.</p>
+            
+            <div class="destinations-grid">
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://images.myguide-cdn.com/content/1/large/oruro-1425685.jpeg')"></div>
+                    <div class="destination-content">
+                        <h3>Oruro - La Paz</h3>
+                        <p>Viaje cómodo y seguro hacia la sede de gobierno</p>
+                        <div class="destination-price">Bs 60</div>
+                        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="selectDestination('Oruro - La Paz', 60)">Comprar Boleto</button>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://viajerosxbolivia.com/wp-content/uploads/Cochabamba-Bolivia.png')"></div>
+                    <div class="destination-content">
+                        <h3>Oruro - Cochabamba</h3>
+                        <p>Conecta con la ciudad de la eterna primavera</p>
+                        <div class="destination-price">Bs 70</div>
+                        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="selectDestination('Oruro - Cochabamba', 70)">Comprar Boleto</button>
+                    </div>
+                </div>
+                
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://unifranz.edu.bo/wp-content/uploads/2025/09/BLOG-SANTA-CRUZ-FOTO-COMPUESTA-1.png')"></div>
+                    <div class="destination-content">
+                        <h3>Oruro - Santa Cruz</h3>
+                        <p>Viaja hacia la tierra del sol y la diversidad cultural</p>
+                        <div class="destination-price">Bs 120</div>
+                        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="selectDestination('Oruro - Santa Cruz', 120)">Comprar Boleto</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section id="servicios" class="section section-dark">
+        <div class="section-container">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Selecciona el servicio que mejor se adapte a tus necesidades de viaje y disfruta de una experiencia única.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3>Económico</h3>
+                    <div class="service-price">Bs 60  -  Bs 80</div>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Asientos estándar</li>
+                        <li><i class="fas fa-check"></i> Aire acondicionado</li>
+                        <li><i class="fas fa-check"></i> QR informativo del viaje</li>
+                        <li><i class="fas fa-check"></i> Paradas programadas</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" onclick="selectService('Económico', 60)">Seleccionar</button>
+                </div>
+                
+                <div class="service-card popular">
+                    <div class="service-icon">
+                        <i class="fas fa-bus-alt"></i>
+                    </div>
+                    <h3>Premium</h3>
+                    <div class="service-price">Bs 240  -  Bs 340</div>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Asientos reclinables 160°</li>
+                        <li><i class="fas fa-check"></i> Snack y Wi-Fi incluido</li>
+                        <li><i class="fas fa-check"></i> QR con seguimiento del viaje</li>
+                        <li><i class="fas fa-check"></i> Atención preferencial</li>
+                        <li><i class="fas fa-check"></i> Entretenimiento a bordo</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" onclick="selectService('Premium', 90)">Seleccionar</button>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shuttle-van"></i>
+                    </div>
+                    <h3>Ejecutivo</h3>
+                    <div class="service-price">Bs 580  -  Bs 880</div>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Asientos de lujo reclinables</li>
+                        <li><i class="fas fa-check"></i> Comida y bebidas premium</li>
+                        <li><i class="fas fa-check"></i> WiFi de alta velocidad</li>
+                        <li><i class="fas fa-check"></i> Espacio adicional para piernas</li>
+                        <li><i class="fas fa-check"></i> Servicio personalizado</li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" onclick="selectService('Ejecutivo', 120)">Seleccionar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="testimonials-container">
+            <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+            <p class="section-subtitle">Experiencias reales de viajeros que han confiado en nosotros</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Excelente servicio, los boletos QR son muy prácticos y la puntualidad es increíble. Definitivamente mi opción preferida para viajar a La Paz.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MC</div>
+                        <div class="testimonial-info">
+                            <h4>María C.</h4>
+                            <p>Viajera frecuente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">El servicio premium vale cada boliviano. Los asientos son cómodos, el WiFi funciona perfectamente y el personal es muy amable.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JR</div>
+                        <div class="testimonial-info">
+                            <h4>Juan R.</h4>
+                            <p>Ejecutivo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Viajo mensualmente a Cochabamba por trabajo y siempre elijo Transportes Oruro. La tecnología QR me permite planificar mejor mis viajes.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AS</div>
+                        <div class="testimonial-info">
+                            <h4>Ana S.</h4>
+                            <p>Empresaria</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contacto" class="section section-light">
+        <div class="section-container">
+            <h2 class="section-title">Contáctanos</h2>
+            <p class="section-subtitle">¿Tienes consultas o deseas reservar tu viaje? Estamos aquí para ayudarte.</p>
+            
+            <div class="contact-form">
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Nombre completo</label>
+                        <input type="text" id="name" class="form-control" placeholder="Ingresa tu nombre" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="Ingresa tu correo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Teléfono</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Ingresa tu teléfono" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" class="form-control" rows="5" placeholder="Escribe tu mensaje aquí" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i>
+                        Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Transportes Oruro</h3>
+                <p>Viaja seguro, moderno y conectado con nuestra tecnología QR integrada. Conectamos Oruro con los principales destinos de Bolivia.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#destinos">Destinos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#estadisticas">Estadísticas</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Av. Bolívar 1234, Oruro, Bolivia</p>
+                <p><i class="fas fa-phone"></i> +591 728 00000</p>
+                <p><i class="fas fa-envelope"></i> info@transportesoruro.com</p>
+                <p><i class="fas fa-clock"></i> Lun-Vie: 7:00 - 22:00<br>Sáb-Dom: 8:00 - 20:00</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2025 Transportes Oruro QR Travel – Todos los derechos reservados.
+        </div>
+    </footer>
+    
+    <!-- Booking Modal -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBookingModal()">&times;</span>
+            <h2 class="modal-title">Reserva tu Viaje</h2>
+            
+            <div class="booking-summary" id="bookingSummary">
+                <div class="summary-item">
+                    <span class="summary-label">Destino:</span>
+                    <span class="summary-value" id="summaryDestination">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Servicio:</span>
+                    <span class="summary-value" id="summaryService">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Precio:</span>
+                    <span class="summary-value" id="summaryPrice">Bs 0</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span class="summary-label">Total:</span>
+                    <span class="summary-value" id="summaryTotal">Bs 0</span>
+                </div>
+            </div>
+            
+            <form id="bookingForm" onsubmit="completeBooking(event)">
+                <div class="form-group">
+                    <label for="bookingName">Nombre completo</label>
+                    <input type="text" id="bookingName" class="form-control" placeholder="Ingresa tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingEmail">Correo electrónico</label>
+                    <input type="email" id="bookingEmail" class="form-control" placeholder="Ingresa tu correo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingPhone">Teléfono</label>
+                    <input type="tel" id="bookingPhone" class="form-control" placeholder="Ingresa tu teléfono" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingDate">Fecha de viaje</label>
+                    <input type="date" id="bookingDate" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingPassengers">Número de pasajeros</label>
+                    <input type="number" id="bookingPassengers" class="form-control" min="1" max="10" value="1" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-check-circle"></i>
+                    Confirmar Reserva
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+         // Animación para llenar las barras
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartFills = document.querySelectorAll('.chart-fill');
+            
+            chartFills.forEach(fill => {
+                const height = fill.getAttribute('data-height');
+                fill.style.height = height;
+            });
+        });
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileToggle.addEventListener('click', function() {
+            mobileToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        // Smooth scroll function
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                const offset = 80;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                if (targetId) {
+                    scrollToSection(targetId);
+                }
+            });
+        });
+        
+        // Service selection
+        let selectedService = '';
+        let selectedServicePrice = 0;
+        
+        function selectService(serviceName, price) {
+            selectedService = serviceName;
+            selectedServicePrice = price;
+            updateBookingSummary();
+            openBookingModal();
+        }
+        
+        // Destination selection
+        let selectedDestination = '';
+        let selectedDestinationPrice = 0;
+        
+        function selectDestination(destinationName, price) {
+            selectedDestination = destinationName;
+            selectedDestinationPrice = price;
+            updateBookingSummary();
+            openBookingModal();
+        }
+        
+        // Update booking summary
+        function updateBookingSummary() {
+            document.getElementById('summaryDestination').textContent = selectedDestination || '-';
+            document.getElementById('summaryService').textContent = selectedService || '-';
+            
+            const totalPrice = selectedDestinationPrice + selectedServicePrice;
+            document.getElementById('summaryPrice').textContent = `Bs ${totalPrice}`;
+            document.getElementById('summaryTotal').textContent = `Bs ${totalPrice}`;
+        }
+        
+        // Booking modal functions
+        function openBookingModal() {
+            document.getElementById('bookingModal').style.display = 'flex';
+            updateBookingSummary();
+        }
+        
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+        
+        // Complete booking
+        function completeBooking(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('bookingName').value;
+            const email = document.getElementById('bookingEmail').value;
+            const phone = document.getElementById('bookingPhone').value;
+            const date = document.getElementById('bookingDate').value;
+            const passengers = document.getElementById('bookingPassengers').value;
+            
+            // Here you would typically send the data to a server
+            alert(`¡Gracias ${name}! Tu reserva para ${selectedDestination} ha sido confirmada. Recibirás un correo con los detalles y tu código QR.`);
+            
+            // Reset form and close modal
+            document.getElementById('bookingForm').reset();
+            closeBookingModal();
+            
+            // Reset selections
+            selectedService = '';
+            selectedServicePrice = 0;
+            selectedDestination = '';
+            selectedDestinationPrice = 0;
+        }
+        
+        // Contact form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+            
+            // Here you would typically send the data to a server
+            alert(`Gracias ${name}! Tu mensaje ha sido enviado correctamente. Nos pondremos en contacto contigo pronto.`);
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+        }
+        
+        // Active navigation link based on scroll position
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Animated statistics counter
+        function animateCounter(element, target, duration) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(start);
+                }
+            }, 16);
+        }
+        
+        // Animated chart bars
+        function animateCharts() {
+            const chartFills = document.querySelectorAll('.chart-fill');
+            chartFills.forEach(fill => {
+                const height = fill.getAttribute('data-height');
+                fill.style.height = `${height}%`;
+            });
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            // Animate statistics
+            animateCounter(document.getElementById('clientCount'), 15000, 2000);
+            animateCounter(document.getElementById('destinationCount'), 25, 1500);
+            animateCounter(document.getElementById('vehicleCount'), 50, 1800);
+            animateCounter(document.getElementById('yearCount'), 12, 1200);
+            
+            // Animate charts after a short delay
+            setTimeout(animateCharts, 500);
+            
+            // Set minimum date for booking to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                closeBookingModal();
+            }
+        });
+           // Bloquear el menú contextual (clic derecho)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('La inspección de elementos está deshabilitada en esta página.');
+        });
+        
+        // Bloquear Ctrl+U (ver código fuente)
+        document.addEventListener('keydown', function(e) {
+            // Detectar Ctrl+U
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                alert('La visualización del código fuente está deshabilitada.');
+            }
+            
+            // También bloquear F12 (herramientas de desarrollador)
+            if (e.key === 'F12') {
+                e.preventDefault();
+                alert('Las herramientas de desarrollador están deshabilitadas.');
+            }
+        });
+        
+        // Protección adicional contra la apertura de herramientas de desarrollador
+        // Esta función verifica si se han abierto las herramientas de desarrollador
+        function checkDevTools() {
+            const threshold = 160; // Diferencia cuando las herramientas están abiertas
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            
+            if (widthThreshold || heightThreshold) {
+                // Redirigir o mostrar un mensaje
+                document.body.innerHTML = '<h1>Acceso no autorizado detectado</h1><p>Las herramientas de desarrollador no están permitidas en esta página.</p>';
+                // O podrías redirigir a otra página:
+                // window.location.href = 'acceso-denegado.html';
+            }
+        }
+        
+        // Ejecutar la verificación periódicamente
+        setInterval(checkDevTools, 1000);
+    </script>
+</body>
+</html>
